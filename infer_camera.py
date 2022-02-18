@@ -130,7 +130,8 @@ if __name__ == '__main__':
                           face_db_path=args.face_db_path,
                           threshold=args.threshold)
     cap = cv2.VideoCapture(args.camera_id)
-    while True:
+    xiangji= True
+    while xiangji:
         ret, img = cap.read()
         if ret:
             start = time.time()
@@ -140,6 +141,7 @@ if __name__ == '__main__':
                 print('预测的人脸位置：', boxes.astype('int32').tolist())
                 print('识别的人脸名称：', names)
                 print('总识别时间：%dms' % int((time.time() - start) * 1000))
+                # xiangji=False
             else:
                 cv2.imshow("result", img)
                 cv2.waitKey(1)

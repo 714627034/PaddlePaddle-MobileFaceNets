@@ -11,7 +11,7 @@ from PIL import ImageDraw, ImageFont, Image
 from detection.face_detect import MTCNN
 from utils.utils import add_arguments, print_arguments
 
-parser = argparse.ArgumentParser(description=__doc__)
+parser = argparse.ArgumentParser(description=__doc__) #从命令行解析参数，如果有存在，重新赋值，如果不存在使用默认值。
 add_arg = functools.partial(add_arguments, argparser=parser)
 add_arg('image_path',               str,     'dataset/test.jpg',         '预测图片路径')
 add_arg('face_db_path',             str,     'face_db',                  '人脸库路径')
@@ -19,7 +19,9 @@ add_arg('threshold',                float,   0.6,                        '判断
 add_arg('mobilefacenet_model_path', str,     'models/infer/model',       'MobileFaceNet预测模型的路径')
 add_arg('mtcnn_model_path',         str,     'models/mtcnn',             'MTCNN预测模型的路径')
 args = parser.parse_args()
+print("输出检测相应参数")
 print_arguments(args)
+print("输出结束")
 
 
 class Predictor:
@@ -67,6 +69,7 @@ class Predictor:
         feature = self.model(img)
         return feature.numpy()
 
+    # self代表函数本身，但是这边self更有可能代表类本身
     def recognition(self, image_path):
         img = cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), -1)
         s = time.time()
@@ -123,7 +126,9 @@ class Predictor:
                 # 判别为人脸的名字
                 img = self.add_text(img, name, corpbbox[0], corpbbox[1] -15, color=(0, 0, 255), size=12)
         cv2.imshow("result", img)
-        cv2.waitKey(0)
+        k=cv2.waitKey(0)
+        if k==27 :
+            cv2.destroyWindow();
 
 
 if __name__ == '__main__':
