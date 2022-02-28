@@ -50,7 +50,7 @@ class Predictor:
             faces_db[name] = feature[0]
         return faces_db
 
-    @staticmethod
+    @staticmethod #图片归一化，加快网络收敛。
     def process(imgs):
         imgs1 = []
         for img in imgs:
@@ -74,6 +74,10 @@ class Predictor:
         img = cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), -1)
         s = time.time()
         imgs, boxes = self.mtcnn.infer_image(img)
+        # cv2.imshow("cyh", imgs[0]) #第一阶段检测人脸结束后获取到人脸。
+        # k=cv2.waitKey(0)
+        # if k==27 :
+        #  cv2.destroyWindow();
         print('人脸检测时间：%dms' % int((time.time() - s) * 1000))
         imgs = self.process(imgs)
         if imgs is None:

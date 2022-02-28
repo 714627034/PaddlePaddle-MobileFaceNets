@@ -21,7 +21,7 @@ class MTCNN:
         self.softmax_r = paddle.nn.Softmax(axis=-1)
         self.rnet.eval()
 
-        # 获取R模型
+        # 获取O模型
         self.onet = paddle.jit.load(os.path.join(model_path, 'ONet'))
         self.softmax_o = paddle.nn.Softmax(axis=-1)
         self.onet.eval()
