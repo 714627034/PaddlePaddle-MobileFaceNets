@@ -22,7 +22,7 @@ def add_arguments(argname, type, default, help, argparser, **kwargs):
                            **kwargs)
 
 
-# 获取lfw全部路径
+# 获取lfw数据集全部路径
 def get_lfw_list(pair_list):
     with open(pair_list, 'r') as fd:
         pairs = fd.readlines()
@@ -113,7 +113,7 @@ def cal_accuracy(y_score, y_true):
     return best_accuracy, best_threshold
 
 
-# 计算lfw每一对的相似度
+# 计算lfw数据集每一对的相似度
 def test_performance(feature_dict, lfw_data_list):
     with open(lfw_data_list, 'r') as fd:
         pairs = fd.readlines()

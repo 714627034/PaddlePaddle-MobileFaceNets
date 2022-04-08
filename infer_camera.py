@@ -121,7 +121,7 @@ class Predictor:
                 # 判别为人脸的名字
                 img = self.add_text(img, name, corpbbox[0], corpbbox[1] -15, color=(0, 0, 255), size=12)
         cv2.imshow("result", img)
-        cv2.waitKey(1)
+        cv2.waitKey(100)
 
 
 if __name__ == '__main__':
@@ -129,20 +129,22 @@ if __name__ == '__main__':
                           mobilefacenet_model_path=args.mobilefacenet_model_path,
                           face_db_path=args.face_db_path,
                           threshold=args.threshold)
-    cap = cv2.VideoCapture(args.camera_id)
+    # cap = cv2.VideoCapture(args.camera_id) # 参数0代表打开笔记本内置摄像头，否则就是视频路径。
+    cap = cv2.VideoCapture(0)
     xiangji= True
     while xiangji:
-        ret, img = cap.read()
+        ret, img = cap.read() #读取一帧的图片
         if ret:
             start = time.time()
             boxes, names = predictor.recognition(img)
+            # predictor.draw_face(img, boxes, names)
             if boxes is not None:
                 predictor.draw_face(img, boxes, names)
                 ti= int((time.time() - start) * 1000)
                 print('预测的人脸位置：', boxes.astype('int32').tolist())
                 print('识别的人脸名称：', names)
                 print('总识别时间：%dms' %ti)
-                xiangji=False
+                # xiangji=False
             else:
                 cv2.imshow("result", img)
                 cv2.waitKey(1)
