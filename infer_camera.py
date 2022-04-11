@@ -120,8 +120,9 @@ class Predictor_Video:
                               (corpbbox[2], corpbbox[3]), (255, 0, 0), 1)
                 # 判别为人脸的名字
                 img = self.add_text(img, name, corpbbox[0], corpbbox[1] -15, color=(0, 0, 255), size=12)
-        cv2.imshow("result", img)
-        cv2.waitKey(100)
+        # cv2.imshow("q is exit", img)
+        # cv2.waitKey(1)
+        return img
 
 
 if __name__ == '__main__':
@@ -137,16 +138,18 @@ if __name__ == '__main__':
         if ret:
             start = time.time()
             boxes, names = predictor.recognition(img)
-            predictor.draw_face(img, boxes, names)
+            # predictor.draw_face(img, boxes, names)
             if boxes is not None:
-                predictor.draw_face(img, boxes, names)
+                img=predictor.draw_face(img, boxes, names)
                 ti= int((time.time() - start) * 1000)
                 print('预测的人脸位置：', boxes.astype('int32').tolist())
                 print('识别的人脸名称：', names)
                 print('总识别时间：%dms' %ti)
                 # xiangji=False
-            else:
-                cv2.imshow("result", img)
-                cv2.waitKey(1)
-        cap.release()
-        cv2.destroyAllWindows()
+            # else:
+            cv2.imshow("q is exit", img)
+            # cv2.waitKey(1)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+    cap.release()
+    cv2.destroyAllWindows()

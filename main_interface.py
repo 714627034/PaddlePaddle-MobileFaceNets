@@ -123,17 +123,16 @@ class face3(): ##获取视频，对视频进行甄别。
             if ret:
                 start = time.time()
                 boxes, names = self.predictor.recognition(img)
-                self.predictor.draw_face(img, boxes, names)
+                ti= int((time.time() - start) * 1000)
                 if boxes is not None:
-                    self.predictor.draw_face(img, boxes, names)
-                    ti= int((time.time() - start) * 1000)
+                    img=self.predictor.draw_face(img, boxes, names)
                     print('预测的人脸位置：', boxes.astype('int32').tolist())
                     print('识别的人脸名称：', names)
                     print('总识别时间：%dms' %ti)
                     # xiangji=False
-                else:
-                    cv2.imshow("result", img)
-                    cv2.waitKey(1)
+                cv2.imshow("result", img)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
         cap.release()
         cv2.destroyAllWindows()
     def back(self):
