@@ -22,7 +22,7 @@ args = parser.parse_args()
 print_arguments(args)
 
 
-class Predictor:
+class Predictor_Video:
     def __init__(self, mtcnn_model_path, mobilefacenet_model_path, face_db_path, threshold):
         self.threshold = threshold
         self.mtcnn = MTCNN(model_path=mtcnn_model_path)
@@ -125,7 +125,7 @@ class Predictor:
 
 
 if __name__ == '__main__':
-    predictor = Predictor(mtcnn_model_path=args.mtcnn_model_path,
+    predictor = Predictor_Video(mtcnn_model_path=args.mtcnn_model_path,
                           mobilefacenet_model_path=args.mobilefacenet_model_path,
                           face_db_path=args.face_db_path,
                           threshold=args.threshold)
@@ -137,7 +137,7 @@ if __name__ == '__main__':
         if ret:
             start = time.time()
             boxes, names = predictor.recognition(img)
-            # predictor.draw_face(img, boxes, names)
+            predictor.draw_face(img, boxes, names)
             if boxes is not None:
                 predictor.draw_face(img, boxes, names)
                 ti= int((time.time() - start) * 1000)
@@ -148,3 +148,5 @@ if __name__ == '__main__':
             else:
                 cv2.imshow("result", img)
                 cv2.waitKey(1)
+        cap.release()
+        cv2.destroyAllWindows()

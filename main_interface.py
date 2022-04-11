@@ -3,6 +3,7 @@ import tkinter as tk
 import tkinter.filedialog
 import numpy as np
 from infer import Predictor
+from infer_camera import Predictor_Video
 import cv2
 import time
 
@@ -103,7 +104,7 @@ class face3(): ##获取视频，对视频进行甄别。
         # self.master.config(bg='blue')
         self.face3 = tk.Frame(self.master,)
         self.face3.pack()
-        self.predictor = Predictor(mtcnn_model_path='models/mtcnn',
+        self.predictor = Predictor_Video(mtcnn_model_path='models/mtcnn',
                                    mobilefacenet_model_path='models/infer/model',
                                    face_db_path='face_db',
                                    threshold=0.6)
@@ -113,14 +114,30 @@ class face3(): ##获取视频，对视频进行甄别。
         atn_back = tk.Button(self.face3,text='退出',command=self.back)
         atn_back.pack()
     def infer(self):
-        start = time.time()
-        boxes, names =self.predictor.recognition('dataset/mimi.jpg')
-        print('预测的人脸位置：', boxes.astype(np.int_).tolist())
-        print('识别的人脸名称：', names)
-        print('总识别时间：%dms' % int((time.time() - start) * 1000))
-        # self.predictor.draw_face('dataset/mimi.jpg', boxes, names)
+        cap = cv2.VideoCapture(0)
+        xiangji= True
+        while xiangji:
+            ret, img = cap.read() #读取一帧的图片
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+            if ret:
+                start = time.time()
+                boxes, names = self.predictor.recognition(img)
+                self.predictor.draw_face(img, boxes, names)
+                if boxes is not None:
+                    self.predictor.draw_face(img, boxes, names)
+                    ti= int((time.time() - start) * 1000)
+                    print('预测的人脸位置：', boxes.astype('int32').tolist())
+                    print('识别的人脸名称：', names)
+                    print('总识别时间：%dms' %ti)
+                    # xiangji=False
+                else:
+                    cv2.imshow("result", img)
+                    cv2.waitKey(1)
+        cap.release()
+        cv2.destroyAllWindows()
     def back(self):
-        self.face1.destroy()
+        self.face3.destroy()
         initface(self.master)
 
 if __name__ == '__main__':
