@@ -1,5 +1,6 @@
 
 import tkinter as tk
+import tkinter.filedialog
 import numpy as np
 from infer import Predictor
 import cv2
@@ -70,12 +71,13 @@ class face1():
         atn_back = tk.Button(self.face1,text='退出',command=self.back)
         atn_back.pack()
     def infer(self):
+        filePath = tk.filedialog.askopenfilename()
         start = time.time()
-        boxes, names =self.predictor.recognition('dataset/mimi.jpg')
+        boxes, names =self.predictor.recognition(filePath)
         print('预测的人脸位置：', boxes.astype(np.int_).tolist())
         print('识别的人脸名称：', names)
         print('总识别时间：%dms' % int((time.time() - start) * 1000))
-        # self.predictor.draw_face('dataset/mimi.jpg', boxes, names)
+        self.predictor.draw_face(filePath, boxes, names)
     def back(self):
         self.face1.destroy()
         initface(self.master)

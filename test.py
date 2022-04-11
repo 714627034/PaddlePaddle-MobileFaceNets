@@ -16,10 +16,11 @@ root.minsize(500,350)
 #定义函数
 def fileChose():
     filePath = tkinter.filedialog.askopenfilename()
-    df = pd.read_csv(filePath)
-    x = df.iloc[:,0].values
-    y = df.iloc[:,1].values
-    plt.bar(x,y)
+    print(filePath)
+    # df = pd.read_csv(filePath)
+    # x = df.iloc[:,0].values
+    # y = df.iloc[:,1].values
+    # plt.bar(x,y)
 
 def savePathChose():
     resultPlot = tkinter.filedialog.askdirectory()

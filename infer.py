@@ -123,6 +123,7 @@ class Predictor:
             for i in range(boxes_c.shape[0]):
                 bbox = boxes_c[i, :4]
                 name = names[i]
+                print("name: "+name)
                 corpbbox = [int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])]
                 # 画人脸框
                 cv2.rectangle(img, (corpbbox[0], corpbbox[1]),
@@ -130,9 +131,11 @@ class Predictor:
                 # 判别为人脸的名字
                 img = self.add_text(img, name, corpbbox[0], corpbbox[1] -15, color=(0, 0, 255), size=12)
         cv2.imshow("result", img)
-        k=cv2.waitKey(0)
-        if k==27 :
-            cv2.destroyWindow();
+        while 1:
+            k=cv2.waitKey(1)
+            if k==27 :
+                cv2.destroyWindow("result")
+                break
 
 
 if __name__ == '__main__':
