@@ -78,7 +78,12 @@ class face1():
         print('预测的人脸位置：', boxes.astype(np.int_).tolist())
         print('识别的人脸名称：', names)
         print('总识别时间：%dms' % int((time.time() - start) * 1000))
-        self.predictor.draw_face(filePath, boxes, names)
+        img=self.predictor.draw_face(filePath, boxes, names)
+        if names[0] != "unknow":
+            cv2.imwrite("./dataset/"+names[0]+".jpg",img)
+            print("图片已保存在 ./dataset/"+names[0]+".jpg")
+        else:
+            print("图片识别失败,不予保存")
     def back(self):
         self.face1.destroy()
         initface(self.master)
@@ -98,7 +103,7 @@ class face2():
         initface(self.master)
 
 
-class face3(): ##获取视频，对视频进行甄别。
+class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
     def __init__(self,master):
         self.master = master
         # self.master.config(bg='blue')

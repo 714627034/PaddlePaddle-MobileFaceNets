@@ -130,12 +130,13 @@ class Predictor:
                               (corpbbox[2], corpbbox[3]), (255, 0, 0), 1)
                 # 判别为人脸的名字
                 img = self.add_text(img, name, corpbbox[0], corpbbox[1] -15, color=(0, 0, 255), size=12)
-        cv2.imshow("result", img)
+        cv2.imshow(name, img)
         while 1:
             k=cv2.waitKey(1)
             if k==27 :
-                cv2.destroyWindow("result")
+                cv2.destroyWindow(name)
                 break
+        return img
 
 
 if __name__ == '__main__':
@@ -148,4 +149,5 @@ if __name__ == '__main__':
     print('预测的人脸位置：', boxes.astype(np.int_).tolist())
     print('识别的人脸名称：', names)
     print('总识别时间：%dms' % int((time.time() - start) * 1000))
-    predictor.draw_face(args.image_path, boxes, names)
+    img=predictor.draw_face(args.image_path, boxes, names)
+    cv2.imwrite("/Users/chenyaohuang/cyh_src/PaddlePaddle-MobileFaceNets/dataset/成品.jpg",img)
