@@ -73,6 +73,9 @@ class face1():
         atn_back.pack()
     def infer(self):
         filePath = tk.filedialog.askopenfilename()
+        if len(filePath ) == 0 :
+            print("filePath is null")
+            return
         start = time.time()
         boxes, names =self.predictor.recognition(filePath)
         print('预测的人脸位置：', boxes.astype(np.int_).tolist())
@@ -114,14 +117,20 @@ class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
                                    face_db_path='face_db',
                                    threshold=0.6)
         self.cap = cv2.VideoCapture(0)
-        atn_infer = tk.Button(self.face3,text='预测',command=self.infer)
+        atn_infer = tk.Button(self.face3,text='监控预测',command=self.infer)
         atn_infer.pack()
+        atn_vi_infer = tk.Button(self.face3,text='视频预测',command=self.v_infer)
+        atn_vi_infer.pack()
         atn_back = tk.Button(self.face3,text='退出',command=self.back)
         atn_back.pack()
     def infer(self):
         cap = cv2.VideoCapture(0)
-        xiangji= True
-        while xiangji:
+        if cap.isOpened() :
+            print("视频正常开启")
+        else:
+            print("视频开启失败，返回")
+            return
+        while cap.isOpened():
             ret, img = cap.read() #读取一帧的图片
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -135,11 +144,43 @@ class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
                     print('识别的人脸名称：', names)
                     print('总识别时间：%dms' %ti)
                     # xiangji=False
-                cv2.imshow("result", img)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
+                cv2.imshow("esc is exit", img)
+                if cv2.waitKey(1) & 0xFF == 27:
                     break
         cap.release()
         cv2.destroyAllWindows()
+    def v_infer(self):
+        filePath = tk.filedialog.askopenfilename()
+        if len(filePath ) == 0 :
+            print("filePath is null")
+            return
+        cap = cv2.VideoCapture(filePath)
+        if cap.isOpened() :
+            print("视频正常开启")
+        else:
+            print("视频开启失败，返回")
+            return
+        while cap.isOpened():
+            ret, img = cap.read() #读取一帧的图片
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+            if ret:
+                start = time.time()
+                boxes, names = self.predictor.recognition(img)
+                ti= int((time.time() - start) * 1000)
+                if boxes is not None:
+                    img=self.predictor.draw_face(img, boxes, names)
+                    print('预测的人脸位置：', boxes.astype('int32').tolist())
+                    print('识别的人脸名称：', names)
+                    print('总识别时间：%dms' %ti)
+                    # xiangji=False
+                cv2.imshow("esc is exit", img)
+                if cv2.waitKey(1) & 0xFF == 27:
+                    break
+        cap.release()
+        cv2.destroyAllWindows()
+    def answer(self):
+        tk.showerror("Answer", "Sorry, no answer available")
     def back(self):
         self.face3.destroy()
         initface(self.master)

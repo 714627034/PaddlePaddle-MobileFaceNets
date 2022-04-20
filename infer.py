@@ -74,11 +74,14 @@ class Predictor:
         img = cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), -1)
         s = time.time()
         imgs, boxes = self.mtcnn.infer_image(img)
+        print('人脸检测时间：%dms' % int((time.time() - s) * 1000))
+        for i in range(len(imgs)):
+            i_str=str(i);
+            cv2.imwrite("./dataset/已检测到人脸"+i_str+".jpg",imgs[i])
         # cv2.imshow("cyh", imgs[0]) #第一阶段检测人脸结束后获取到人脸。
         # k=cv2.waitKey(0)
         # if k==27 :
         #  cv2.destroyWindow();
-        print('人脸检测时间：%dms' % int((time.time() - s) * 1000))
         imgs = self.process(imgs)
         if imgs is None:
             return None, None
@@ -123,18 +126,18 @@ class Predictor:
             for i in range(boxes_c.shape[0]):
                 bbox = boxes_c[i, :4]
                 name = names[i]
-                print("name: "+name)
+                # print("name: "+name)
                 corpbbox = [int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])]
                 # 画人脸框
                 cv2.rectangle(img, (corpbbox[0], corpbbox[1]),
                               (corpbbox[2], corpbbox[3]), (255, 0, 0), 1)
                 # 判别为人脸的名字
-                img = self.add_text(img, name, corpbbox[0], corpbbox[1] -15, color=(0, 0, 255), size=12)
-        cv2.imshow(name, img)
+                img = self.add_text(img, name, corpbbox[0], corpbbox[1] -15, color=(0, 0, 255), size=50)
+        cv2.imshow(name+"  esc is exit", img)
         while 1:
             k=cv2.waitKey(1)
             if k==27 :
-                cv2.destroyWindow(name)
+                cv2.destroyWindow(name+"  esc is exit")
                 break
         return img
 
