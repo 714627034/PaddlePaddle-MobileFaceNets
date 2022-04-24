@@ -85,6 +85,11 @@ class face1():
         if names[0] != "unknow":
             cv2.imwrite("./dataset/"+names[0]+".jpg",img)
             print("图片已保存在 ./dataset/"+names[0]+".jpg")
+            # cv2.imshow("esc is exit", img)
+            while ((cv2.waitKey(1) & 0xFF) !=27):
+                cv2.imshow("esc is exit", img)
+                # pass
+            cv2.destroyAllWindows()
         else:
             print("图片识别失败,不予保存")
     def back(self):
@@ -116,7 +121,7 @@ class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
                                    mobilefacenet_model_path='models/infer/model',
                                    face_db_path='face_db',
                                    threshold=0.6)
-        self.cap = cv2.VideoCapture(0)
+        # self.cap = cv2.VideoCapture(0)
         atn_infer = tk.Button(self.face3,text='监控预测',command=self.infer)
         atn_infer.pack()
         atn_vi_infer = tk.Button(self.face3,text='视频预测',command=self.v_infer)
@@ -132,8 +137,8 @@ class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
             return
         while cap.isOpened():
             ret, img = cap.read() #读取一帧的图片
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            # if cv2.waitKey(1) & 0xFF == ord('q'):
+            #     break
             if ret:
                 start = time.time()
                 boxes, names = self.predictor.recognition(img)
@@ -162,8 +167,8 @@ class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
             return
         while cap.isOpened():
             ret, img = cap.read() #读取一帧的图片
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            # if cv2.waitKey(1) & 0xFF == ord('q'):
+            #     break
             if ret:
                 start = time.time()
                 boxes, names = self.predictor.recognition(img)
@@ -187,6 +192,7 @@ class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
 
 if __name__ == '__main__':
     root = tk.Tk()
+    # canvas = tk.Canvas(root, width=1200,height=699,bd=0, highlightthickness=0)
     basedesk(root)
     root.mainloop()
 
