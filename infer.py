@@ -132,7 +132,7 @@ class Predictor:
                 cv2.rectangle(img, (corpbbox[0], corpbbox[1]),
                               (corpbbox[2], corpbbox[3]), (255, 0, 0), 1)
                 # 判别为人脸的名字
-                img = self.add_text(img, name, corpbbox[0], corpbbox[1] -15, color=(0, 0, 255), size=50)
+                img = self.add_text(img, name, corpbbox[0], corpbbox[1] -15, color=(0, 0, 255), size=25)
         # cv2.imshow(name+"  esc is exit", img)
         return img
 
