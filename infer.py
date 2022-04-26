@@ -19,9 +19,9 @@ add_arg('threshold',                float,   0.6,                        '判断
 add_arg('mobilefacenet_model_path', str,     'models/infer/model',       'MobileFaceNet预测模型的路径')
 add_arg('mtcnn_model_path',         str,     'models/mtcnn',             'MTCNN预测模型的路径')
 args = parser.parse_args()
-print("输出检测相应参数")
+# print("输出检测相应参数")
 print_arguments(args)
-print("输出结束")
+# print("输出结束")
 
 
 class Predictor:

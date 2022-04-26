@@ -8,11 +8,19 @@ import cv2
 import time
 
 class land():
-    def __init__(self,master):
+    # user = {"admin":"123456"}  #定义一个字典来存储用户的信息(key :账号 , value：密码)
+    user = {"":""}  #定义一个字典来存储用户的信息(key :账号 , value：密码)
+    boss_user = {"admin":"123456"}  #定义一个字典来存储用户的信息(key :账号 , value：密码)
+    def __init__(self,):
+        master = tk.Tk()
+        canvas = tk.Canvas(master, width=800, height=302, bg=None)
+        image_file = tk.PhotoImage(file="dataset/denglu.gif")
+        pp=image_file
+        canvas.create_image(400, 0, anchor='n', image=pp)
+        canvas.pack()
         self.root = master
         self.root.config()
         self.root.title('人脸识别系统登陆')
-        # self.root.geometry('600x400')
         width=800
         height=302
         screenwidth = self.root.winfo_screenwidth()
@@ -20,14 +28,104 @@ class land():
         alignstr = '%dx%d+%d+%d' % (width, height, (screenwidth-width)/2, (screenheight-height)/2)
         self.root.geometry(alignstr)
         self.root.resizable(width=False, height=False)
-        photo=tkinter.PhotoImage(file="dataset/caozuo.gif")
-        # l = tk.Label(self.root, text='你好！this is AI', bg='green', font=('Arial', 12), width=30, height=2)
         tk.Label(self.root, text='你好！欢迎使用人脸识别系统。请确认您的身份',font=('Arial', 12)).place(relx=0.3,rely=0.08)
-    # tk.Label(self.root, text='你好！欢迎使用人脸识别系统。请确认您的身份', image=photo,compound='center',font=('Arial', 12)).place(relx=0.3,rely=0.08)
-        initface(self.root)
+        # self.land = tk.Frame(self.master,)
+        # self.land.place(relx=0.4,rely=0.55)
+        account_lable = tkinter.Label(self.root, text = '账号', bg='lightskyblue', fg='white', font=('Arial', 12), width=5, height=1)
+        account_lable.place(relx=0.29,rely=0.4)
+        pasw_lable = tkinter.Label(self.root, text = '密码', bg='lightskyblue', fg='white', font=('Arial', 12), width=5, height=1)
+        pasw_lable.place(relx=0.29,rely=0.5)
+
+        account = tkinter.Entry(self.root,width=20,highlightthickness = 1,highlightcolor = 'lightskyblue',relief='groove')  #账号输入框
+        account.place(relx=0.4,rely=0.4 )  #添加进主页面,relx和rely意思是与父元件的相对位置
+        password = tkinter.Entry(self.root,show='*',highlightthickness = 1,highlightcolor = 'lightskyblue',relief='groove')  #密码输入框
+        password.place(relx=0.4,rely=0.5) #添加进主页面
+        print("到此为止")
+        #登录与注册按钮
+        loginBtn = tkinter.Button(self.root,text='登录',font = ('宋体',12),width=4,height=1,command=lambda:self.login(account,password),relief='solid',bd = 0.5,bg='lightcyan')
+        loginBtn.place(relx=0.41,rely=0.63)
+        # loginBtn.pack()
+        loginBtn = tkinter.Button(self.root,text='注册',font = ('宋体',12),width=4,height=1,bd=0.5,command=lambda:self.reguest(account,password),relief='solid',bg='lightcyan')
+        loginBtn.place(relx=0.56,rely=0.63)
+        # loginBtn.pack()
+        self.root.mainloop()
+        # initface(self.root)
+        #登录按钮处理函数
+    def login(self,account,password):
+        ac = account.get()
+        ps = password.get()
+        if (ac == "" or ps == ""):
+            root1=tk.Tk()
+            tk.Label(root1,text='用户登录,请完整填写信息！！',fg='red',width=28, height=6).pack()
+            tk.Button(root1,text='确定',width=3,height=1,command=root1.destroy).pack(side='bottom')
+            print("用户登录", "请完整填写信息！！")  # messagebox的方法
+        elif self.user.get(ac) != ps:
+            account.delete(0,'end')  #清空文本框的内容
+            password.delete(0,'end')  #清空文本框的内容
+            if self.boss_user.get(ac)==ps:
+                root1=tk.Tk()
+                tk.Label(root1,text='管理员登录,登录成功！即将进入菜单界面.！',fg='red',width=28, height=6).pack()
+                tk.Button(root1,text='确定',width=3,height=1,command=root1.destroy).pack(side='bottom')
+                self.root.destroy()
+                boss()
+                return
+
+            root1=tk.Tk()
+            tk.Label(root1,text='用户登录,账号或者密码有误！',fg='red',width=28, height=6).pack()
+            tk.Button(root1,text='确定',width=3,height=1,command=root1.destroy).pack(side='bottom')
+            print("用户登录", "账号或者密码有误！")   #messagebox的方法
+        else:
+            account.delete(0, 'end')  # 清空文本框的内容
+            password.delete(0, 'end')  # 清空文本框的内容
+            root1=tk.Tk()
+            tk.Label(root1,text='用户登录,登录成功！即将进入菜单界面....',fg='red',width=28, height=6).pack()
+            tk.Button(root1,text='确定',width=3,height=1,command=root1.destroy).pack(side='bottom')
+            print("用户登录", "登录成功！即将进入菜单界面....")  # messagebox的方法
+            self.root.destroy()
+            basedesk()
+        return
+
+    def reguest(self,account,password):
+        ac = account.get()
+        ps = password.get()
+        if (ac == "" or ps == ""):
+            root1=tk.Tk()
+            tk.Label(root1,text='用户登录,请完整填写信息！！',fg='red',width=28, height=6).pack()
+            tk.Button(root1,text='确定',width=3,height=1,command=root1.destroy).pack(side='bottom')
+            print("用户登录", "请完整填写信息！！")  # messagebox的方法
+        elif (ac=="admin"):
+            account.delete(0,'end')  #清空文本框的内容
+            password.delete(0,'end')  #清空文本框的内容
+            root1=tk.Tk()
+            tk.Label(root1,text='用户注册,账号名非法，不允许注册！.',fg='red',width=28, height=6).pack()
+            tk.Button(root1,text='确定',width=3,height=1,command=root1.destroy).pack(side='bottom')
+            print("用户注册", "账号已存在！")   #messagebox的方法
+        elif ac in self.user:
+            account.delete(0,'end')  #清空文本框的内容
+            password.delete(0,'end')  #清空文本框的内容
+            root1=tk.Tk()
+            tk.Label(root1,text='用户注册,账号已存在！.',fg='red',width=28, height=6).pack()
+            tk.Button(root1,text='确定',width=3,height=1,command=root1.destroy).pack(side='bottom')
+            print("用户注册", "账号已存在！")   #messagebox的方法
+        else:
+            self.user[ac] = ps
+            account.delete(0, 'end')  # 清空文本框的内容
+            password.delete(0, 'end')  # 清空文本框的内容
+            root1=tk.Tk()
+            tk.Label(root1,text='用户注册,注册成功！.',fg='red',width=28, height=6).pack()
+            tk.Button(root1,text='确定',width=3,height=1,command=root1.destroy).pack(side='bottom')
+            print("用户注册", "注册成功！")  # messagebox的方法
+        return
 
 class basedesk():
-    def __init__(self,master):
+    def __init__(self):
+        master = tk.Tk()
+        # canvas = tk.Canvas(root, width=1200,height=699,bd=0, highlightthickness=0)
+        canvas = tk.Canvas(master, width=800, height=302, bg=None)
+        image_file = tk.PhotoImage(file="dataset/denglu.gif")
+        pp=image_file
+        canvas.create_image(400, 0, anchor='n', image=pp)
+        canvas.pack()
         self.root = master
         self.root.config()
         self.root.title('人脸识别')
@@ -42,13 +140,44 @@ class basedesk():
         # l = tk.Label(self.root, text='你好！this is AI', bg='green', font=('Arial', 12), width=30, height=2)
         tk.Label(self.root, text='你好！欢迎使用人脸识别系统。请选择功能',bg='lightskyblue', fg='white', font=('Arial', 12)).place(relx=0.35,rely=0.08)
         initface(self.root)
+        self.root.mainloop()
+        # land(self.root)
+        # DB(self.root)
 
-class initface():
+class boss():
+    def __init__(self):
+        master = tk.Tk()
+        # canvas = tk.Canvas(root, width=1200,height=699,bd=0, highlightthickness=0)
+        canvas = tk.Canvas(master, width=800, height=302, bg=None)
+        image_file = tk.PhotoImage(file="dataset/denglu.gif")
+        pp=image_file
+        canvas.create_image(400, 0, anchor='n', image=pp)
+        canvas.pack()
+        self.root = master
+        self.root.config()
+        self.root.title('人脸识别')
+        # self.root.geometry('600x400')
+        width=800
+        height=302
+        screenwidth = self.root.winfo_screenwidth()
+        screenheight = self.root.winfo_screenheight()
+        alignstr = '%dx%d+%d+%d' % (width, height, (screenwidth-width)/2, (screenheight-height)/2)
+        self.root.geometry(alignstr)
+        # self.root.resizable(width=False, height=False)
+        # l = tk.Label(self.root, text='你好！this is AI', bg='green', font=('Arial', 12), width=30, height=2)
+        tk.Label(self.root, text='你好！管理员，欢迎使用人脸识别系统。请选择功能',bg='lightskyblue', fg='white', font=('Arial', 12)).place(relx=0.35,rely=0.08)
+        boss_initface(self.root)
+        self.root.mainloop()
+        # land(self.root)
+        # DB(self.root)
+
+class boss_initface():
     def __init__(self,master):
 
         self.master = master
         # self.master.config(bg='white')
         #基准界面initface
+        # self.initface = self.master
         self.initface = tk.Frame(self.master,)
         self.initface.place(relx=0.4,rely=0.55)
         btn = tk.Button(self.initface,text='图片类人脸识别',command=self.picture)
@@ -69,6 +198,34 @@ class initface():
     def db(self,):
         self.initface.destroy()
         DB(self.master)
+
+class initface():
+    def __init__(self,master):
+
+        self.master = master
+        # self.master.config(bg='white')
+        #基准界面initface
+        # self.initface = self.master
+        self.initface = tk.Frame(self.master,)
+        self.initface.place(relx=0.4,rely=0.55)
+        btn = tk.Button(self.initface,text='图片类人脸识别',command=self.picture)
+        btn.pack()
+        atn = tk.Button(self.initface,text='视频类人脸识别',command=self.video)
+        atn.pack()
+        # db_qt = tk.Button(self.initface,text='人脸库照片添加',command=self.db)
+        # db_qt.pack()
+
+    def picture(self,):
+        self.initface.destroy()
+        face1(self.master)
+
+    def video(self,):
+        self.initface.destroy()
+        face3(self.master)
+
+    # def db(self,):
+    #     self.initface.destroy()
+    #     DB(self.master)
 
 class DB():
     def __init__(self,master):
@@ -174,7 +331,7 @@ class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
                                    face_db_path='face_db',
                                    threshold=0.6)
         # self.cap = cv2.VideoCapture(0)
-        atn_infer = tk.Button(self.face3,text='监控预测',command=self.infer)
+        atn_infer = tk.Button(self.face3,text='监控预测',bg='red',command=self.infer)
         atn_infer.pack()
         atn_vi_infer = tk.Button(self.face3,text='视频预测',command=self.v_infer)
         atn_vi_infer.pack()
@@ -243,13 +400,15 @@ class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
         initface(self.master)
 
 if __name__ == '__main__':
-    root = tk.Tk()
-    # canvas = tk.Canvas(root, width=1200,height=699,bd=0, highlightthickness=0)
-    canvas = tk.Canvas(root, width=800, height=302, bg=None)
-    image_file = tk.PhotoImage(file="dataset/denglu.gif")
-    canvas.create_image(400, 0, anchor='n', image=image_file)
-    canvas.pack()
+    # root = tk.Tk()
+    # # canvas = tk.Canvas(root, width=1200,height=699,bd=0, highlightthickness=0)
+    # canvas = tk.Canvas(root, width=800, height=302, bg=None)
+    # image_file = tk.PhotoImage(file="dataset/denglu.gif")
+    # canvas.create_image(400, 0, anchor='n', image=image_file)
+    # canvas.pack()
     # land(root)
-    basedesk(root)
-    root.mainloop()
+    land()
+    # basedesk()
+    # basedesk(root)
+    # root.mainloop()
 
