@@ -178,26 +178,31 @@ class boss_initface():
         # self.master.config(bg='white')
         #基准界面initface
         # self.initface = self.master
-        self.initface = tk.Frame(self.master,)
-        self.initface.place(relx=0.4,rely=0.55)
-        btn = tk.Button(self.initface,text='图片类人脸识别',command=self.picture)
+        self.boss_initface = tk.Frame(self.master,)
+        self.boss_initface.place(relx=0.4,rely=0.55)
+        btn = tk.Button(self.boss_initface,text='图片类人脸识别',command=self.picture)
         btn.pack()
-        atn = tk.Button(self.initface,text='视频类人脸识别',command=self.video)
+        atn = tk.Button(self.boss_initface,text='视频类人脸识别',command=self.video)
         atn.pack()
-        db_qt = tk.Button(self.initface,text='人脸库照片添加',command=self.db)
+        db_qt = tk.Button(self.boss_initface,text='人脸库照片添加',command=self.db)
         db_qt.pack()
+        tuichu = tk.Button(self.boss_initface,text='退出登录',command=self.quit)
+        tuichu.pack()
 
     def picture(self,):
-        self.initface.destroy()
-        face1(self.master)
+        self.boss_initface.destroy()
+        face1(self.master,True)
 
     def video(self,):
-        self.initface.destroy()
-        face3(self.master)
+        self.boss_initface.destroy()
+        face3(self.master,True)
 
     def db(self,):
-        self.initface.destroy()
-        DB(self.master)
+        self.boss_initface.destroy()
+        DB(self.master,True)
+    def quit(self,):
+        self.master.destroy()
+        land()
 
 class initface():
     def __init__(self,master):
@@ -214,21 +219,26 @@ class initface():
         atn.pack()
         # db_qt = tk.Button(self.initface,text='人脸库照片添加',command=self.db)
         # db_qt.pack()
+        tuichu = tk.Button(self.initface,text='退出登陆',command=self.quit)
+        tuichu.pack()
 
     def picture(self,):
         self.initface.destroy()
-        face1(self.master)
+        face1(self.master,False)
 
     def video(self,):
         self.initface.destroy()
-        face3(self.master)
+        face3(self.master,False)
 
     # def db(self,):
     #     self.initface.destroy()
     #     DB(self.master)
+    def quit(self,):
+        self.master.destroy()
+        land()
 
 class DB():
-    def __init__(self,master):
+    def __init__(self,master,is_boss):
         self.master = master
         # self.master.config(bg='blue')
         self.DB = tk.Frame(self.master,)
@@ -239,7 +249,10 @@ class DB():
         # db_back = tk.Button(self.DB,text='退出',command=self.back)
         tk.Button(self.DB, text='选择存入人脸库的图片', command=self.load).grid(row=2, column=0,sticky=tk.W, padx=5, pady=5)
         # tk.Button(self.DB, text='Quit', command=self.load).grid(row=2, column=0,sticky=tk.W, padx=5, pady=5)
-        tk.Button(self.DB, text='退出', command=self.back).grid(row=2, column=2,sticky=tk.W, padx=5, pady=5)
+        if is_boss==True:
+            tk.Button(self.DB, text='退出', command=self.boss_back).grid(row=2, column=2,sticky=tk.W, padx=5, pady=5)
+        else:
+            tk.Button(self.DB, text='退出', command=self.back).grid(row=2, column=2,sticky=tk.W, padx=5, pady=5)
         # db_back.pack()
     def load(self):
         filePath = tk.filedialog.askopenfilename()
@@ -260,8 +273,12 @@ class DB():
         self.DB.destroy()
         initface(self.master)
 
+    def boss_back(self):
+        self.DB.destroy()
+        boss_initface(self.master)
+
 class face1():
-    def __init__(self,master):
+    def __init__(self,master,is_boss):
         self.master = master
         # self.master.config(bg='blue')
         self.face1 = tk.Frame(self.master,)
@@ -272,8 +289,12 @@ class face1():
                                     threshold=0.6)
         atn_infer = tk.Button(self.face1,text='选择图片',command=self.infer)
         atn_infer.pack()
-        atn_back = tk.Button(self.face1,text='退出',command=self.back)
-        atn_back.pack()
+        if is_boss==True:
+            atn_back = tk.Button(self.face1,text='退出',command=self.boss_back)
+            atn_back.pack()
+        else:
+            atn_back = tk.Button(self.face1,text='退出',command=self.back)
+            atn_back.pack()
     def infer(self):
         filePath = tk.filedialog.askopenfilename()
         if len(filePath ) == 0 :
@@ -304,7 +325,9 @@ class face1():
     def back(self):
         self.face1.destroy()
         initface(self.master)
-
+    def boss_back(self):
+        self.face1.destroy()
+        boss_initface(self.master)
 
 class face2():
     def __init__(self,master):
@@ -321,7 +344,7 @@ class face2():
 
 
 class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
-    def __init__(self,master):
+    def __init__(self,master,is_boss):
         self.master = master
         # self.master.config(bg='blue')
         self.face3 = tk.Frame(self.master,)
@@ -335,8 +358,12 @@ class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
         atn_infer.pack()
         atn_vi_infer = tk.Button(self.face3,text='视频预测',command=self.v_infer)
         atn_vi_infer.pack()
-        atn_back = tk.Button(self.face3,text='退出',command=self.back)
-        atn_back.pack()
+        if is_boss==True:
+            atn_back = tk.Button(self.face3,text='退出',command=self.boss_back)
+            atn_back.pack()
+        else:
+            atn_back = tk.Button(self.face3,text='退出',command=self.back)
+            atn_back.pack()
     def infer(self):
         cap = cv2.VideoCapture(0)
         if cap.isOpened() :
@@ -398,6 +425,9 @@ class face3(): ##获取摄像头，对摄像头逐帧进行甄别。
     def back(self):
         self.face3.destroy()
         initface(self.master)
+    def boss_back(self):
+        self.face3.destroy()
+        boss_initface(self.master)
 
 if __name__ == '__main__':
     # root = tk.Tk()
